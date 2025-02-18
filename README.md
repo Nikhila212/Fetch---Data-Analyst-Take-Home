@@ -10,3 +10,14 @@ For this Assessment I have started by exploring the data for quality issues and 
 * Users Dataset: Contains users demographics.
 #### Step 2: Loading and Reviewing the data
 I have inspected the structure of each dataset. I have loaded the datasets into Pandas.
+#### Step 3: Identify the Data Quality issues
+I have checked for common data quality issues like
+* Missing Values
+* Duplicate Records
+* Incorrect Data types
+* Outliers
+#### Missing Values
+* **Description:** BIRTH_DATE (Users), CATEGORY (Products), FINAL_SALE (Transactions) have missing values.
+* **Impact:** Missing birth dates impact age-related insights; missing categories impact product segmentation.
+* **Resolution:** Imputation or exclusion based on business rules.
+  
