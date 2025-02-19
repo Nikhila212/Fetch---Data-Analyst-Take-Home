@@ -195,3 +195,8 @@ The cleaned data is saved to the following CSV files:
 * CLEANED_PRODUCTS_TAKEHOME.csv: Contains the cleaned product data.
 
 These files are saved to the specified path for further analysis or reporting.
+
+#### Step 5: Challenging FIelds
+
+In the Products dataset, there are certain fields named CATEGORY_1, CATEGORY_2, CATEGORY_3, and CATEGORY_4. These generic names can create confusion, as they do not clearly indicate what kind of categorical data they represent. Without proper documentation or domain knowledge, it is unclear whether these fields refer to product classifications, industry sectors, material types, or some other form of hierarchical categorization. 
+By adopting more descriptive names, the dataset becomes more user-friendly and reduces ambiguity when performing analysis, reporting, and decision-making.
