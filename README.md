@@ -49,12 +49,14 @@ I have checked for common data quality issues like
 
 ### Inconsistent Datatypes
 **Users**:
+
 **CREATED_DATE(Object) & BIRTH_DATE(Object):**
 * **Description**: This field stores the date and time the user was created, but it is stored as an object type.
 * **Impact**: Without proper date formatting, it can cause issues when performing date-based operations, such as sorting, filtering, or calculating age or duration.
 * **Resolution**: Convert CREATED_DATE and BIRTH_DATE to a datetime type using pandas' pd.to_datetime().
 
 **Transactions**:
+
 **RECEIPT_ID(Object):**
 * **Description**: This field stores the unique identifier for each transaction.
 * **Impact**: The object type is fine for alphanumeric receipt IDs. However, if they are strictly numeric, converting them to int64 or string could improve performance.
@@ -80,6 +82,7 @@ I have checked for common data quality issues like
 * **Impact**: Similar to FINAL_QUANTITY, performing calculations on FINAL_SALE will be difficult if it remains as an object type.
 
 **Products:**
+
 **BARCODE (float64):**
 * **Description**: This field stores the product's barcode.
 * **Impact**: Like in the Transactions Data, storing the barcode as float64 can result in rounding errors, particularly if barcodes have leading zeros or non-numeric characters.
@@ -124,3 +127,70 @@ I have checked for common data quality issues like
 * **Description**: This high count suggests missing, duplicated, or invalid barcodes.
 * **Impact**: Affects inventory management, sales tracking, and recommendation systems.
 * **Resolution**: Implement barcode validation rules and remove duplicates while ensuring missing values are handled appropriately.
+
+#### Step 4: Data Cleaning
+The process involves handling missing values, removing duplicates, managing inconsistent data types, detecting and removing outliers, addressing potential anomalies, and saving the cleaned data to CSV files. Below is an outline of the steps followed during the data cleaning process.
+
+**Overview**
+The data cleaning process is essential for ensuring that datasets are accurate, consistent, and ready for analysis. The following datasets are handled in this script:
+* users_df – Contains user details, including demographic information.
+* transaction_df – Contains transaction records, including dates, quantities, and sale amounts.
+* products_df – Contains product details, including categories and barcodes.
+
+**Steps**
+
+**1. Handling Missing Values**
+**Users**:
+* Missing birth dates are filled with the median year as a placeholder, ensuring consistency in the dataset. The BIRTH_DATE column is populated with a date of format YYYY-01-01.
+
+**Transactions**:
+* Missing PURCHASE_DATE and SCAN_DATE are filled with the most frequent (mode) date in each column, ensuring that these essential dates are present for analysis.
+* The FINAL_QUANTITY column, which contains numeric values, has any non-numeric entries converted to NaN. Missing numeric values in FINAL_QUANTITY and FINAL_SALE are filled with the respective column's median.
+* Missing barcodes in the BARCODE column are replaced with the most frequent barcode value.
+
+**Products**:
+* Missing barcodes in the BARCODE column are replaced with the most frequent barcode value.
+
+**2. Removing Duplicates**
+
+* In the transaction_df, duplicate entries based on the BARCODE are removed, retaining the first occurrence.
+* In the products_df, duplicates are removed based on a combination of columns: CATEGORY_1, CATEGORY_2, CATEGORY_3, CATEGORY_4, MANUFACTURER, BRAND, and BARCODE. The first occurrence is kept.
+
+**3. Handling Inconsistent Data Types**
+**Users**:
+* The BIRTH_DATE and CREATED_DATE columns are converted to the appropriate datetime format.
+
+**Transactions**:
+* Columns such as RECEIPT_ID and BARCODE are converted to string format.
+* Date columns PURCHASE_DATE and SCAN_DATE are converted to datetime format.
+* Numeric columns FINAL_QUANTITY and FINAL_SALE are converted to appropriate numeric types.
+
+**Products**:
+* The BARCODE column is converted to string format to maintain consistency.
+
+**4. Handling Outliers**
+
+The FINAL_SALE column in the transaction_df is analyzed for outliers using the Interquartile Range (IQR) method. Values outside the range defined by 1.5 times the IQR above the third quartile or below the first quartile are considered outliers and removed from the dataset.
+
+**5. Handling Potential Anomalies**
+
+**Gender Data:**
+* Gender anomalies are addressed by standardizing various non-binary and undefined gender categories (e.g., 'non-binary', 'prefer_not_to_say') into the value OTHER.
+* All gender values are converted to lowercase to ensure case consistency.
+* Missing gender values are filled with UNKNOWN.
+
+**Date and Barcode Anomalies:**
+* Both SCAN_DATE and PURCHASE_DATE are converted to timezone-naive datetime format to ensure consistency.
+* Entries where the SCAN_DATE is earlier than the PURCHASE_DATE are removed.
+* Transactions with missing or invalid barcodes are removed from the dataset.
+
+**Product Barcode Anomalies:**
+* Products with missing or invalid barcodes are removed from the dataset.
+
+**6. Saving Cleaned Data**
+The cleaned data is saved to the following CSV files:
+* CLEANED_USER_TAKEHOME.csv: Contains the cleaned user data.
+* CLEANED_TRANSACTION_TAKEHOME.csv: Contains the cleaned transaction data.
+* CLEANED_PRODUCTS_TAKEHOME.csv: Contains the cleaned product data.
+
+These files are saved to the specified path for further analysis or reporting.
