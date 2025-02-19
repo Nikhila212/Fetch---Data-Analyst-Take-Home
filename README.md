@@ -16,6 +16,7 @@ I have checked for common data quality issues like
 * Duplicate Records
 * Incorrect Data types
 * Outliers
+* Potential Anomalies
 ### Missing Values
 **Users**: 
 * **Description**: The dataset contains missing values in several columns. Specifically, 3,675 records are missing birth dates, 4,812 records lack state information, and 5,892 records do not have gender specified. The most significant gap is in the language column, with 30,508 missing values, indicating a substantial portion of users did not provide their preferred language. However, the ID and CREATED_DATE fields are fully populated with no missing values.
