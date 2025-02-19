@@ -47,3 +47,56 @@ I have checked for common data quality issues like
 * **Impact**: Duplicate transactions could result in inflated sales or transaction volume numbers, misleading reports about revenue, transaction counts, or performance metrics. Incorrect transaction data could lead to incorrect resource allocation, impacting operations like inventory restocking or customer support.
 * **Resolution**: Remove duplicates by identifying them based on a unique transaction identifier. Apply data validation techniques during data entry or batch processing to detect and eliminate duplicate entries.
 
+### Inconsistent Datatypes
+**Users**:
+**CREATED_DATE(Object) & BIRTH_DATE(Object):**
+* **Description**: This field stores the date and time the user was created, but it is stored as an object type.
+* **Impact**: Without proper date formatting, it can cause issues when performing date-based operations, such as sorting, filtering, or calculating age or duration.
+* **Resolution**: Convert CREATED_DATE and BIRTH_DATE to a datetime type using pandas' pd.to_datetime().
+
+**Transactions**:
+**RECEIPT_ID(Object):**
+* **Description**: This field stores the unique identifier for each transaction.
+* **Impact**: The object type is fine for alphanumeric receipt IDs. However, if they are strictly numeric, converting them to int64 or string could improve performance.
+* **Resolution**: If alphanumeric, keep as object. If numeric, convert to string or int64 based on the ID format.
+
+**PURCHASE_DATE(Object) & SCAN_DATE(Object):**
+* **Description**: This field stores the date when a transaction occurred but is in object format.
+* **Impact**: Date-related operations, such as sorting or calculating purchase frequency, will not be efficient.
+* **Resolution**: Convert PURCHASE_DATE AND SCAN_DATE to a datetime type using pd.to_datetime().
+
+**BARCODE (float64):**
+* **Description**: This field represents the barcode of a product, but it is stored as a float64, which is typically not correct for barcode numbers.
+* **Impact**: Storing as float64 may introduce rounding issues and lead to incorrect values, especially if barcodes have leading zeros or are alphanumeric.
+* **Resolution**: Convert BARCODE to string (object) type to preserve the full barcode accurately without any rounding.
+
+**FINAL_QUANTITY (object):**
+* **Description**: This field stores the quantity of products purchased, but it’s stored as an object type.
+* **Impact**: If the data is numeric, it will be difficult to perform arithmetic operations on the quantities stored as objects.
+* **Resolution**: Convert FINAL_QUANTITY to an appropriate numeric type, like int64 or float64, depending on the data.
+
+**FINAL_SALE (object):**
+* **Description**: This field stores the final sale amount, but it is stored as an object type.
+* **Impact**: Similar to FINAL_QUANTITY, performing calculations on FINAL_SALE will be difficult if it remains as an object type.
+
+**Products:**
+**BARCODE (float64):**
+* **Description**: This field stores the product's barcode.
+* **Impact**: Like in the Transactions Data, storing the barcode as float64 can result in rounding errors, particularly if barcodes have leading zeros or non-numeric characters.
+* **Resolution**: Convert BARCODE to a string type to preserve the barcode accurately.
+* **Resolution**: Convert FINAL_SALE to a numeric type (float64 or decimal) for accurate calculations.
+
+### Outlier Detection in Final Sales
+**Description**: The box plot visualization presented in this project aims to detect outliers in the Final Sale Amounts dataset. Outlier detection is crucial for identifying anomalies that may impact data analysis, or business decision-making.
+**Interpretation of the Box Plot**: The box plot follows the Interquartile Range (IQR) method to identify potential outliers:
+**1. Box (Interquartile Range - IQR)**
+* The box represents the middle 50% of data (Q1 to Q3).
+* The line inside the box denotes the median (Q2, 50th percentile).
+* The whiskers extend up to 1.5 times the IQR from Q1 and Q3.
+**2. Outliers Identification**
+* Any data points beyond the whiskers are considered outliers.
+* In this plot, several black circular points outside the whiskers indicate the presence of outliers.
+* Most outliers are clustered around higher values of Final Sale Amounts.
+* A few extreme outliers extend beyond 200, 300, and even 400.
+
+**Conclusion**: The Final Sale Amounts dataset contains multiple outliers, as evident from the presence of several points beyond the upper whisker. These extreme values might require further investigation to determine if they are due to data entry errors, special cases, or genuine high-value transactions.
