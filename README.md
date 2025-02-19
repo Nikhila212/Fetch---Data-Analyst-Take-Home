@@ -89,10 +89,12 @@ I have checked for common data quality issues like
 ### Outlier Detection in Final Sales
 **Description**: The box plot visualization presented in this project aims to detect outliers in the Final Sale Amounts dataset. Outlier detection is crucial for identifying anomalies that may impact data analysis, or business decision-making.
 **Interpretation of the Box Plot**: The box plot follows the Interquartile Range (IQR) method to identify potential outliers:
+
 **1. Box (Interquartile Range - IQR)**
 * The box represents the middle 50% of data (Q1 to Q3).
 * The line inside the box denotes the median (Q2, 50th percentile).
 * The whiskers extend up to 1.5 times the IQR from Q1 and Q3.
+
 **2. Outliers Identification**
 * Any data points beyond the whiskers are considered outliers.
 * In this plot, several black circular points outside the whiskers indicate the presence of outliers.
@@ -100,3 +102,25 @@ I have checked for common data quality issues like
 * A few extreme outliers extend beyond 200, 300, and even 400.
 
 **Conclusion**: The Final Sale Amounts dataset contains multiple outliers, as evident from the presence of several points beyond the upper whisker. These extreme values might require further investigation to determine if they are due to data entry errors, special cases, or genuine high-value transactions.
+
+### Potential Anomalies
+**Users:**
+
+**GENDER (11 anomalies):**
+* **Description**: The GENDER field likely contains unexpected values beyond the predefined categories (e.g., Male = 1, Female = 2, Other = 3).
+* **Impact**: Skews demographic analysis and marketing segmentation.
+* **Resolution**: Standardize values to predefined categories and flag inconsistencies for manual review.
+
+**Transactions:**
+
+**SCAN_DATE (24,440 anomalies):**
+* **Description**: This could indicate duplicate, missing, or incorrect timestamps related to scanned receipts.
+* **Impact**: Affects time-based sales analysis, fraud detection, and promotional campaign effectiveness.
+* **Resolution**: Cross-verify SCAN_DATE with PURCHASE_DATE, ensuring logical consistency (e.g., SCAN_DATE should not be before PURCHASE_DATE).
+
+**Products:**
+
+**BARCODE (841,342 anomalies):**
+* **Description**: This high count suggests missing, duplicated, or invalid barcodes.
+* **Impact**: Affects inventory management, sales tracking, and recommendation systems.
+* **Resolution**: Implement barcode validation rules and remove duplicates while ensuring missing values are handled appropriately.
