@@ -57,11 +57,8 @@ To better understand the data, we performed several visualizations:
 * A bar chart highlighted stores with the highest number of transactions.
 * This helps in identifying key locations where purchases are most frequent.
 
-#### Step 5: Challenging FIelds
+#### Step 6: Challenging FIelds
 * Some product entries like CATEGORY_1, CATEGORY_2, CATEGORY_3, and CATEGORY_4 lacked clear descriptions, making it hard to analyze product performance without additional reference data. 
 * These generic names can create confusion, as they do not clearly indicate what kind of categorical data they represent. 
 * Without proper documentation or domain knowledge, it is unclear whether these fields refer to product classifications, industry sectors, material types, or some other form of hierarchical categorization. 
 * By adopting more descriptive names, the dataset becomes more user-friendly and reduces ambiguity when performing analysis, reporting, and decision-making.
-
-
-
